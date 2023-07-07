@@ -161,6 +161,15 @@ window.addEventListener("mousemove", (e) => {
   // console.log(cursor.x, cursor.y);
 });
 
+// カーソルが画面外にいるかどうかのフラグ
+let cursorInside = true;
+window.addEventListener("mouseout", () => {
+  cursorInside = false;
+});
+window.addEventListener("mouseover", () => {
+  cursorInside = true;
+});
+
 // animation
 const clock = new THREE.Clock();
 const animate = () => {
@@ -176,9 +185,11 @@ const animate = () => {
     mesh.rotation.y += 0.12 * getDeltaTime;
   }
 
-  // カーソルを用いたカメラの制御
-  camera.position.x += cursor.x * getDeltaTime * 1.5;
-  camera.position.y += -cursor.y * getDeltaTime * 1.5;
+  // カーソルを用いたカメラの制御（カーソルが画面内にあるときのみ）
+  if (cursorInside) {
+    camera.position.x += cursor.x * getDeltaTime * 1.5;
+    camera.position.y += -cursor.y * getDeltaTime * 1.5;
+  }
 
   window.requestAnimationFrame(animate);
 };
